@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Traceable test cases for the VWO Login Dashboard, based on the supplied product requirements.">
+  <title>VWO Login Dashboard — Test Cases</title>
+  <style>
+    :root {
+      --ink: #202b3c;
+      --muted: #5e6b7e;
+      --brand: #4936c8;
+      --brand-light: #f1efff;
+      --line: #dce2ec;
+      --panel: #f7f9fc;
+      --warn: #fff6dd;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #eef1f6;
+      color: var(--ink);
+      font: 14px/1.5 "Segoe UI", Arial, sans-serif;
+    }
+    .document {
+      max-width: 1080px;
+      margin: 30px auto;
+      padding: 54px 64px;
+      background: white;
+      box-shadow: 0 8px 32px rgba(26, 39, 61, .1);
+    }
+    header { padding-bottom: 24px; border-bottom: 3px solid var(--brand); }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--brand);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0; font-size: 34px; line-height: 1.2; }
+    .subtitle { margin: 10px 0 0; color: var(--muted); font-size: 16px; }
+    .meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+    .meta div { padding: 11px 13px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; }
+    .meta strong { display: block; color: var(--muted); font-size: 10px; text-transform: uppercase; }
+    .meta span { display: block; margin-top: 3px; font-weight: 600; }
+    nav { margin: 24px 0 30px; padding: 16px 20px; background: var(--brand-light); border-radius: 7px; }
+    nav h2 { margin: 0 0 7px; font-size: 15px; }
+    nav ol { columns: 2; margin: 0; padding-left: 20px; }
+    nav li { break-inside: avoid; margin: 3px 0; }
+    a { color: var(--brand); text-decoration: none; }
+    h2 { margin: 30px 0 12px; padding-bottom: 7px; border-bottom: 1px solid var(--line); font-size: 21px; }
+    h3 { margin: 21px 0 8px; font-size: 16px; }
+    p { margin: 8px 0; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 4px 0; }
+    table { width: 100%; margin: 12px 0 18px; border-collapse: collapse; font-size: 11px; }
+    th, td { padding: 8px 9px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: #f0f2f8; }
+    tbody tr:nth-child(even) { background: #fbfcfe; }
+    .callout { margin: 14px 0; padding: 12px 14px; background: var(--warn); border: 1px solid #f0d98b; border-radius: 6px; }
+    .case { margin: 17px 0 22px; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; break-inside: avoid; }
+    .case h3 { margin: 0; padding: 10px 13px; background: var(--brand-light); color: #28205f; }
+    .case table { margin: 0; border: 0; }
+    .case th { width: 150px; background: #fafbfe; }
+    .case td, .case th { border-top: 1px solid var(--line); }
+    .priority { font-weight: 700; white-space: nowrap; }
+    .p0 { color: #a82323; }
+    .p1 { color: #9a5700; }
+    .p2 { color: #375b9b; }
+    .small { color: var(--muted); font-size: 12px; }
+    footer { margin-top: 38px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    @media (max-width: 700px) {
+      .document { margin: 0; padding: 25px 16px; }
+      h1 { font-size: 28px; }
+      .meta { grid-template-columns: 1fr; }
+      nav ol { columns: 1; }
+      table { display: block; overflow-x: auto; }
+    }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      body { background: white; font-size: 9pt; }
+      .document { max-width: none; margin: 0; padding: 0; box-shadow: none; }
+      h2, h3 { break-after: avoid; }
+      table, tr, .case { break-inside: avoid; }
+      nav { break-inside: avoid; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <main class="document">
+    <header>
+      <p class="eyebrow">Quality Assurance · Test Case Specification</p>
+      <h1>VWO Login Dashboard</h1>
+      <p class="subtitle">Functional and non-functional test cases for authentication, recovery, accessibility, security, and login experience.</p>
+      <div class="meta">
+        <div><strong>Document version</strong><span>1.0</span></div>
+        <div><strong>Prepared</strong><span>24 October 2026</span></div>
+        <div><strong>Source</strong><span>Supplied VWO Login Dashboard PRD</span></div>
+      </div>
+    </header>
+
+    <nav aria-label="Table of contents">
+      <h2>Test case groups</h2>
+      <ol>
+        <li><a href="#summary">Summary and conventions</a></li>
+        <li><a href="#login">Login and validation</a></li>
+        <li><a href="#recovery">Password management</a></li>
+        <li><a href="#session">Session and authentication options</a></li>
+        <li><a href="#experience">UX, accessibility, and compatibility</a></li>
+        <li><a href="#security">Security, privacy, and performance</a></li>
+        <li><a href="#integration">Integrations and user journeys</a></li>
+      </ol>
+    </nav>
+
+    <section id="summary">
+      <h2>1. Summary and conventions</h2>
+      <p>This specification turns the supplied PRD into executable manual test cases. It includes the skill’s detailed test-case fields and a compact execution summary. Requirements are identified by descriptive trace labels mapped to PRD statements below; the labels are not external requirement IDs.</p>
+      <table>
+        <thead><tr><th>Trace label</th><th>PRD requirement coverage</th></tr></thead>
+        <tbody>
+          <tr><td>AUTH-01–04</td><td>Email/password authentication; field validation on blur; actionable failures; loading feedback; successful dashboard handoff.</td></tr>
+          <tr><td>PASS-01–03</td><td>Forgot password, email recovery, secure reset token, and enforced password requirements.</td></tr>
+          <tr><td>SESS-01–03</td><td>Remember Me, secure session handling, configurable timeout, secure token management.</td></tr>
+          <tr><td>AUTHX-01–03</td><td>Optional MFA; enterprise SSO (SAML/OAuth); optional Google/Microsoft social login.</td></tr>
+          <tr><td>UX-01–04</td><td>Responsive/touch-friendly UI, autofocus, clickable labels, loading states, branding, Light/Dark Mode, announcements, registration route.</td></tr>
+          <tr><td>A11Y-01–03</td><td>Screen-reader support, ARIA labels, keyboard navigation, high contrast, WCAG 2.1 AA.</td></tr>
+          <tr><td>SEC-01–05</td><td>HTTPS, protected authentication data, secure password/session handling, rate limiting, privacy/enterprise audit expectations.</td></tr>
+          <tr><td>PERF-01–03</td><td>Login page under 2 seconds on standard connections, asset optimization/CDN, availability and concurrent login scale.</td></tr>
+          <tr><td>INT-01–04</td><td>Core platform transition, analytics, customer support, registration/onboarding, recent activity.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><strong>Specification gap handling:</strong> Do not infer exact password rules, error wording, lockout thresholds, session duration, reset-token expiry, supported browser versions, concurrency levels, or recovery alternatives. Verify them against approved product/security configuration. Cases depending on an undefined value are marked “per approved policy” and should not be signed off until that policy is supplied.</div>
+      <p><strong>Priority:</strong> P0 = critical authentication/security path; P1 = high priority; P2 = normal/conditional. <strong>Type:</strong> Functional, Validation, Security, UX, Accessibility, Performance, or Integration. <strong>Execution result:</strong> Not Run until tester records Pass/Fail/Blocked.</p>
+      <p><strong>Test data:</strong> Use only approved non-production accounts and provider tenants. References below are placeholders, not credentials. Never record actual passwords, reset tokens, or session tokens in results.</p>
+    </section>
+
+    <section id="login">
+      <h2>2. Login and input validation</h2>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_001 — Login with valid credentials</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Authentication · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / Positive · AUTH-01, INT-01</td></tr>
+          <tr><th>Preconditions</th><td>Active test user exists; login page and VWO platform are available.</td></tr>
+          <tr><th>Test data</th><td>Approved active-user email and matching password.</td></tr>
+          <tr><th>Steps</th><td>1. Open the login page.<br>2. Enter the approved email and password.<br>3. Submit the form.</td></tr>
+          <tr><th>Expected result</th><td>Authentication succeeds, clear processing feedback is shown while pending, and the user is transitioned to the appropriate VWO dashboard.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_002 — Reject an incorrect password</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Authentication · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / Negative · AUTH-01, AUTH-03, SEC-04</td></tr>
+          <tr><th>Preconditions</th><td>Login page is available; test account is active.</td></tr>
+          <tr><th>Test data</th><td>Registered email and incorrect password.</td></tr>
+          <tr><th>Steps</th><td>1. Enter registered email and incorrect password.<br>2. Submit the form.</td></tr>
+          <tr><th>Expected result</th><td>Login is denied; the user remains unauthenticated; a clear, actionable failure is shown without disclosing sensitive data or account secrets.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_003 — Handle an unregistered email safely</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Authentication · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / Negative · AUTH-01, AUTH-03, SEC-04</td></tr>
+          <tr><th>Preconditions</th><td>Login page is available; test email is not associated with an account.</td></tr>
+          <tr><th>Test data</th><td>Approved unregistered test email and arbitrary non-secret password.</td></tr>
+          <tr><th>Steps</th><td>1. Enter the unregistered email and a password.<br>2. Submit the form.</td></tr>
+          <tr><th>Expected result</th><td>Login is denied and the error does not reveal whether an account exists unless an approved product/security requirement explicitly permits that disclosure.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_004 — Validate both fields when submitted empty</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Input validation · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Validation / Negative · AUTH-02</td></tr>
+          <tr><th>Preconditions</th><td>Login page is open.</td></tr>
+          <tr><th>Test data</th><td>Email: blank; password: blank.</td></tr>
+          <tr><th>Steps</th><td>1. Leave both fields empty.<br>2. Submit the form.</td></tr>
+          <tr><th>Expected result</th><td>Required-field validation is presented clearly for applicable fields; no authentication request is made with empty credentials.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_005 — Validate a missing password</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Input validation · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Validation / Negative · AUTH-02</td></tr>
+          <tr><th>Preconditions</th><td>Login page is open.</td></tr>
+          <tr><th>Test data</th><td>Valid-form email; blank password.</td></tr>
+          <tr><th>Steps</th><td>1. Enter an email address.<br>2. Leave password empty.<br>3. Move focus away from the password field, then submit.</td></tr>
+          <tr><th>Expected result</th><td>Password-required feedback is associated with the password field on blur and/or submission according to the implemented validation design; no login request is sent.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_006 — Validate malformed email format</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Email validation · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Validation / Negative · AUTH-02</td></tr>
+          <tr><th>Preconditions</th><td>Login page is open.</td></tr>
+          <tr><th>Test data</th><td>Malformed email values, such as missing local/domain parts or an invalid address form; password arbitrary.</td></tr>
+          <tr><th>Steps</th><td>1. Enter a malformed email.<br>2. Move focus away from the email field.<br>3. Observe validation and attempt submission.</td></tr>
+          <tr><th>Expected result</th><td>Email format feedback appears on blur; invalid input cannot proceed to authentication until corrected, consistent with the approved validation rules.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_007 — Accept a valid email format</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Email validation · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Validation / Positive · AUTH-02</td></tr>
+          <tr><th>Preconditions</th><td>Login page is open.</td></tr>
+          <tr><th>Test data</th><td>Approved registered test email in valid format.</td></tr>
+          <tr><th>Steps</th><td>1. Enter the valid email.<br>2. Move focus away from the email field.</td></tr>
+          <tr><th>Expected result</th><td>No invalid-format error is displayed; the field remains usable and the user can continue.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_008 — Verify validation feedback updates after correction</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Input validation · <span class="priority p2">P2</span></td></tr>
+          <tr><th>Type / reference</th><td>Validation / UX · AUTH-02</td></tr>
+          <tr><th>Preconditions</th><td>Login page is open.</td></tr>
+          <tr><th>Test data</th><td>Start with malformed email, then replace it with an approved valid email.</td></tr>
+          <tr><th>Steps</th><td>1. Enter malformed email and blur the field.<br>2. Confirm validation appears.<br>3. Correct the address and blur again.</td></tr>
+          <tr><th>Expected result</th><td>Stale invalid-format feedback clears or updates when the input becomes valid; the field’s accessible state is updated consistently.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_009 — Show an authentication loading state</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Login UX · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>UX / Functional · UX-01</td></tr>
+          <tr><th>Preconditions</th><td>Test environment allows observation of an in-progress authentication request.</td></tr>
+          <tr><th>Test data</th><td>Approved test-user credentials.</td></tr>
+          <tr><th>Steps</th><td>1. Enter valid credentials.<br>2. Submit while observing the form during the pending response.</td></tr>
+          <tr><th>Expected result</th><td>Clear loading/progress feedback is visible during processing; the interface does not misleadingly indicate completion before the result is known.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_LOGIN_010 — Prevent repeated submissions while processing</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Login UX · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / Error handling · UX-01, SEC-04</td></tr>
+          <tr><th>Preconditions</th><td>A login request can be held pending in the test environment.</td></tr>
+          <tr><th>Test data</th><td>Approved test-user credentials.</td></tr>
+          <tr><th>Steps</th><td>1. Submit the login form.<br>2. While the request is pending, click submit repeatedly or press Enter repeatedly.</td></tr>
+          <tr><th>Expected result</th><td>Repeated interaction does not create unintended duplicate authentication actions or inconsistent session state; user receives clear progress feedback.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+    </section>
+
+    <section id="recovery">
+      <h2>3. Password management and recovery</h2>
+      <article class="case">
+        <h3>TC_VWO_PASS_001 — Open the forgot-password flow</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Password recovery · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional · PASS-01</td></tr>
+          <tr><th>Preconditions</th><td>Login page and recovery service are available.</td></tr>
+          <tr><th>Test data</th><td>None.</td></tr>
+          <tr><th>Steps</th><td>1. Select the forgot-password option.</td></tr>
+          <tr><th>Expected result</th><td>User is taken to a usable password recovery flow with clear next steps.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_PASS_002 — Request email recovery for a registered account</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Password recovery · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / Positive · PASS-01, PASS-02</td></tr>
+          <tr><th>Preconditions</th><td>Registered test account can receive test email.</td></tr>
+          <tr><th>Test data</th><td>Registered test-account email.</td></tr>
+          <tr><th>Steps</th><td>1. Open recovery flow.<br>2. Submit the registered email.<br>3. Inspect the test mailbox.</td></tr>
+          <tr><th>Expected result</th><td>Recovery request is accepted and the approved recovery message is delivered; the UI confirms next steps without exposing secrets.</td></tr>
+          <tr><th>Actual / status</th><td>Record delivery/result without copying reset tokens into the test report. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_PASS_003 — Handle recovery request for an unknown email</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Password recovery · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / Privacy · PASS-01, SEC-04</td></tr>
+          <tr><th>Preconditions</th><td>Recovery flow is available; test email is not registered.</td></tr>
+          <tr><th>Test data</th><td>Approved unregistered email address.</td></tr>
+          <tr><th>Steps</th><td>1. Submit the unregistered email in the recovery form.<br>2. Observe UI response and test mailbox.</td></tr>
+          <tr><th>Expected result</th><td>Response follows approved privacy behavior and does not unnecessarily disclose account existence; no recovery is granted to an unauthorized user.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_PASS_004 — Reset password using a valid reset link</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Password recovery · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / Positive · PASS-02, PASS-03</td></tr>
+          <tr><th>Preconditions</th><td>A valid reset link was issued to an approved test account.</td></tr>
+          <tr><th>Test data</th><td>Valid reset link and new password meeting the approved password policy.</td></tr>
+          <tr><th>Steps</th><td>1. Open the reset link.<br>2. Enter and confirm a compliant new password if confirmation is requested.<br>3. Submit the reset.</td></tr>
+          <tr><th>Expected result</th><td>Password reset succeeds, confirmation is clear, and the user can authenticate using the new password according to session/security policy.</td></tr>
+          <tr><th>Actual / status</th><td>Do not record password or token. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_PASS_005 — Reject an invalid or expired reset token</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Password recovery security · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Security / Negative · PASS-02</td></tr>
+          <tr><th>Preconditions</th><td>Reset flow available; approved invalid/expired test token is available.</td></tr>
+          <tr><th>Test data</th><td>Invalid, expired, or already-used reset link as applicable.</td></tr>
+          <tr><th>Steps</th><td>1. Open the invalid/expired link.<br>2. Attempt to set a new password.</td></tr>
+          <tr><th>Expected result</th><td>Password change is denied; a safe, understandable recovery path is provided; the existing credential is not changed.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_PASS_006 — Verify reset token cannot be reused</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Password recovery security · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Security / State transition · PASS-02</td></tr>
+          <tr><th>Preconditions</th><td>Test account has completed a password reset.</td></tr>
+          <tr><th>Test data</th><td>The same reset link after successful use.</td></tr>
+          <tr><th>Steps</th><td>1. Reopen the previously consumed reset link.<br>2. Attempt another password change.</td></tr>
+          <tr><th>Expected result</th><td>Consumed token cannot authorize a second reset; user is directed to request a fresh recovery link if needed.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_PASS_007 — Enforce password requirements on reset</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Password policy · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Validation / Negative · PASS-03</td></tr>
+          <tr><th>Preconditions</th><td>Valid reset flow available; password policy has been provided by product/security.</td></tr>
+          <tr><th>Test data</th><td>Candidate password that fails a documented policy rule.</td></tr>
+          <tr><th>Steps</th><td>1. Enter a password that violates the approved requirement.<br>2. Submit the reset form.</td></tr>
+          <tr><th>Expected result</th><td>Password is rejected with guidance identifying the unmet rule; password is not changed. Exact rules and text must follow approved policy.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run. Blocked until password policy is confirmed.</td></tr>
+        </tbody></table>
+      </article>
+    </section>
+
+    <section id="session">
+      <h2>4. Session and authentication options</h2>
+      <article class="case">
+        <h3>TC_VWO_SESS_001 — Create a secure session after successful login</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Session management · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Security / Functional · SESS-02, SEC-02</td></tr>
+          <tr><th>Preconditions</th><td>Approved test account and authorized inspection method are available.</td></tr>
+          <tr><th>Test data</th><td>Valid test credentials.</td></tr>
+          <tr><th>Steps</th><td>1. Log in successfully.<br>2. Inspect session behavior using approved test tooling without copying secrets into evidence.</td></tr>
+          <tr><th>Expected result</th><td>A session is established using the application's approved secure session mechanism; credentials and session secrets are not exposed in page content or insecure transport.</td></tr>
+          <tr><th>Actual / status</th><td>Record sanitized observations only. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_SESS_002 — Verify session timeout</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Session management · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Security / Boundary · SESS-02</td></tr>
+          <tr><th>Preconditions</th><td>Approved session timeout and test clock/wait procedure are known.</td></tr>
+          <tr><th>Test data</th><td>Valid test account; configured inactivity/absolute timeout values.</td></tr>
+          <tr><th>Steps</th><td>1. Log in.<br>2. Remain inactive for the configured timeout period.<br>3. Attempt to access a protected dashboard route.</td></tr>
+          <tr><th>Expected result</th><td>Session behavior matches the configured timeout; expired access is denied or requires reauthentication and is handled clearly.</td></tr>
+          <tr><th>Actual / status</th><td>Record measured duration and result. Blocked until timeout policy is provided; Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_SESS_003 — Verify Remember Me persistence</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Session management · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / State transition · SESS-01</td></tr>
+          <tr><th>Preconditions</th><td>Remember Me control is available; persistence policy is documented.</td></tr>
+          <tr><th>Test data</th><td>Approved test account; Remember Me selected and unselected runs.</td></tr>
+          <tr><th>Steps</th><td>1. Log in with Remember Me selected.<br>2. Close and reopen the browser or start a new browser session as policy defines.<br>3. Repeat with Remember Me unselected.</td></tr>
+          <tr><th>Expected result</th><td>Session persistence differs according to the documented Remember Me policy; no password is stored in an unsafe or visible way.</td></tr>
+          <tr><th>Actual / status</th><td>Record outcome for each selection. Blocked until persistence policy is confirmed; Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_SESS_004 — End access after logout or session termination</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Session management · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Security / State transition · SESS-02, SEC-02</td></tr>
+          <tr><th>Preconditions</th><td>Authenticated test session; logout or session termination action is available.</td></tr>
+          <tr><th>Test data</th><td>Valid test account.</td></tr>
+          <tr><th>Steps</th><td>1. Log in.<br>2. End the session using the available logout/termination path.<br>3. Attempt to revisit a protected page using browser navigation or a fresh request.</td></tr>
+          <tr><th>Expected result</th><td>Ended session no longer grants access to protected content; reauthentication is required.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_AUTHX_001 — Complete enabled MFA challenge</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Multi-factor authentication · <span class="priority p1">P1*</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / Positive · AUTHX-01</td></tr>
+          <tr><th>Preconditions</th><td>MFA is enabled for the test account and test factor is provisioned.</td></tr>
+          <tr><th>Test data</th><td>Valid primary credentials and valid test MFA proof.</td></tr>
+          <tr><th>Steps</th><td>1. Submit valid primary credentials.<br>2. Complete the MFA challenge.</td></tr>
+          <tr><th>Expected result</th><td>Access is granted only after required factors succeed; the user reaches the dashboard.</td></tr>
+          <tr><th>Actual / status</th><td>Conditional: execute only if MFA is in release scope. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_AUTHX_002 — Deny invalid or cancelled MFA challenge</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Multi-factor authentication · <span class="priority p1">P1*</span></td></tr>
+          <tr><th>Type / reference</th><td>Security / Negative · AUTHX-01</td></tr>
+          <tr><th>Preconditions</th><td>MFA is enabled for test account.</td></tr>
+          <tr><th>Test data</th><td>Invalid test proof and/or user-cancelled challenge.</td></tr>
+          <tr><th>Steps</th><td>1. Submit valid primary credentials.<br>2. Submit invalid MFA proof or cancel the challenge.</td></tr>
+          <tr><th>Expected result</th><td>Protected access is not granted; the outcome and retry/recovery guidance follow the approved MFA policy.</td></tr>
+          <tr><th>Actual / status</th><td>Conditional: execute only if MFA is in release scope. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_AUTHX_003 — Complete configured enterprise SSO</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Enterprise SSO · <span class="priority p1">P1*</span></td></tr>
+          <tr><th>Type / reference</th><td>Integration / Positive · AUTHX-02</td></tr>
+          <tr><th>Preconditions</th><td>Organization SSO configuration and test identity-provider account are available.</td></tr>
+          <tr><th>Test data</th><td>Authorized enterprise test identity.</td></tr>
+          <tr><th>Steps</th><td>1. Start the configured SSO flow.<br>2. Authenticate with the identity provider.<br>3. Complete the provider handoff.</td></tr>
+          <tr><th>Expected result</th><td>Configured SAML/OAuth SSO flow completes and the authorized user reaches the correct VWO account/dashboard.</td></tr>
+          <tr><th>Actual / status</th><td>Conditional: execute only if SSO is in release scope. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_AUTHX_004 — Handle failed, denied, or cancelled SSO</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Enterprise SSO · <span class="priority p1">P1*</span></td></tr>
+          <tr><th>Type / reference</th><td>Integration / Negative · AUTHX-02</td></tr>
+          <tr><th>Preconditions</th><td>SSO is configured and provider failure/cancel path can be exercised.</td></tr>
+          <tr><th>Test data</th><td>Provider denial, failed authentication, or cancelled test sign-in.</td></tr>
+          <tr><th>Steps</th><td>1. Start SSO.<br>2. Deny or cancel the identity-provider request, or use an unauthorized test identity.</td></tr>
+          <tr><th>Expected result</th><td>No unauthorized VWO access is granted; user receives a clear recovery path and no sensitive provider details are exposed unnecessarily.</td></tr>
+          <tr><th>Actual / status</th><td>Conditional: execute only if SSO is in release scope. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_AUTHX_005 — Complete enabled social sign-in</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Social login · <span class="priority p2">P2*</span></td></tr>
+          <tr><th>Type / reference</th><td>Integration / Positive · AUTHX-03</td></tr>
+          <tr><th>Preconditions</th><td>Google or Microsoft sign-in is enabled and a linked test identity is available.</td></tr>
+          <tr><th>Test data</th><td>Authorized linked identity-provider test account.</td></tr>
+          <tr><th>Steps</th><td>1. Choose the enabled social provider.<br>2. Complete provider authentication and return to VWO.</td></tr>
+          <tr><th>Expected result</th><td>Successful provider authentication returns the user to the correct VWO dashboard/account.</td></tr>
+          <tr><th>Actual / status</th><td>Conditional: run only when feature is included. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+    </section>
+
+    <section id="experience">
+      <h2>5. UX, accessibility, and compatibility</h2>
+      <article class="case">
+        <h3>TC_VWO_UX_001 — Verify initial focus on the first input</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Login UX · <span class="priority p2">P2</span></td></tr>
+          <tr><th>Type / reference</th><td>UX / Accessibility · UX-01, A11Y-01</td></tr>
+          <tr><th>Preconditions</th><td>Login page is opened in a supported browser.</td></tr>
+          <tr><th>Test data</th><td>None.</td></tr>
+          <tr><th>Steps</th><td>1. Open or reload the login page.<br>2. Inspect the focused element without interacting.</td></tr>
+          <tr><th>Expected result</th><td>Focus is placed on the first input field as specified, without unexpectedly skipping context or triggering input.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_UX_002 — Activate fields through their labels</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Login form · <span class="priority p2">P2</span></td></tr>
+          <tr><th>Type / reference</th><td>UX / Accessibility · UX-01, A11Y-01</td></tr>
+          <tr><th>Preconditions</th><td>Login form is visible.</td></tr>
+          <tr><th>Test data</th><td>None.</td></tr>
+          <tr><th>Steps</th><td>1. Click or tap the email field label.<br>2. Click or tap the password field label.</td></tr>
+          <tr><th>Expected result</th><td>Each label focuses/activates its associated input.</td></tr>
+          <tr><th>Actual / status</th><td>Record during execution: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_A11Y_001 — Navigate the login form using keyboard only</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Accessibility · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Accessibility / Functional · A11Y-01, A11Y-02</td></tr>
+          <tr><th>Preconditions</th><td>Login page is open; keyboard available.</td></tr>
+          <tr><th>Test data</th><td>None.</td></tr>
+          <tr><th>Steps</th><td>1. Use Tab/Shift+Tab to navigate all interactive controls.<br>2. Use keyboard activation keys on buttons, checkbox, and links.<br>3. Submit using the keyboard.</td></tr>
+          <tr><th>Expected result</th><td>All controls are reachable and operable in a logical order; focus is visible; no keyboard trap prevents completing or leaving the form.</td></tr>
+          <tr><th>Actual / status</th><td>Record issues and evidence. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_A11Y_002 — Verify screen-reader names and validation announcements</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Accessibility · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Accessibility · A11Y-01</td></tr>
+          <tr><th>Preconditions</th><td>Supported screen reader and browser are available.</td></tr>
+          <tr><th>Test data</th><td>None; trigger a required-field and malformed-email validation state.</td></tr>
+          <tr><th>Steps</th><td>1. Navigate each form control with screen reader enabled.<br>2. Trigger validation.<br>3. Listen to labels, instructions, and error feedback.</td></tr>
+          <tr><th>Expected result</th><td>Controls expose meaningful accessible names/roles/states; validation feedback is programmatically associated and announced without relying only on color.</td></tr>
+          <tr><th>Actual / status</th><td>Record assistive technology/browser and observations. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_A11Y_003 — Verify high-contrast presentation</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Accessibility · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Accessibility / Visual · A11Y-03</td></tr>
+          <tr><th>Preconditions</th><td>High-contrast mode is supported in the target browser/OS.</td></tr>
+          <tr><th>Test data</th><td>None.</td></tr>
+          <tr><th>Steps</th><td>1. Enable system/browser high-contrast setting.<br>2. Open the login page and inspect controls, focus, text, and validation states.</td></tr>
+          <tr><th>Expected result</th><td>Content and controls remain perceivable and operable; no essential content disappears or becomes indistinguishable.</td></tr>
+          <tr><th>Actual / status</th><td>Record configuration and observations. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_A11Y_004 — Assess WCAG 2.1 AA login-page behavior</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Accessibility · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Accessibility / Compliance · A11Y-01–03</td></tr>
+          <tr><th>Preconditions</th><td>Approved WCAG 2.1 AA checklist and test environment are available.</td></tr>
+          <tr><th>Test data</th><td>Normal, focus, error, and theme states.</td></tr>
+          <tr><th>Steps</th><td>1. Evaluate login form and announcement in normal state.<br>2. Evaluate keyboard focus, validation, contrast, labels, and responsive states against approved criteria.</td></tr>
+          <tr><th>Expected result</th><td>Login-page implementation meets applicable WCAG 2.1 AA criteria; exceptions are recorded with evidence and impact.</td></tr>
+          <tr><th>Actual / status</th><td>Record checklist evidence. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_UX_003 — Verify responsive layout and touch controls</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Responsive UI · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Compatibility / UX · UX-01</td></tr>
+          <tr><th>Preconditions</th><td>Supported desktop, tablet, and mobile viewports/devices are available.</td></tr>
+          <tr><th>Test data</th><td>Approved viewport/device matrix; exact matrix TBD.</td></tr>
+          <tr><th>Steps</th><td>1. Open the login page at each supported size.<br>2. Enter credentials, operate checkbox/buttons/links by touch where applicable.<br>3. Check scrolling and orientation changes.</td></tr>
+          <tr><th>Expected result</th><td>Form remains readable and usable without unintended clipping or horizontal scrolling; touch targets and controls remain operable.</td></tr>
+          <tr><th>Actual / status</th><td>Record device, viewport, browser, and outcome. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_UX_004 — Verify Light and Dark Mode display</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Theme / branding · <span class="priority p2">P2</span></td></tr>
+          <tr><th>Type / reference</th><td>Visual / UX · UX-03</td></tr>
+          <tr><th>Preconditions</th><td>Theme options are included in the release.</td></tr>
+          <tr><th>Test data</th><td>Light and Dark Mode settings.</td></tr>
+          <tr><th>Steps</th><td>1. View login page in Light Mode.<br>2. Switch to Dark Mode using the provided option.<br>3. Inspect form, announcement, focus, errors, and controls.</td></tr>
+          <tr><th>Expected result</th><td>Both themes render coherently with VWO branding; controls, feedback, and text remain legible and usable.</td></tr>
+          <tr><th>Actual / status</th><td>Conditional: execute if theme support is present. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_UX_005 — Verify registration link and product announcement</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Login page content · <span class="priority p2">P2</span></td></tr>
+          <tr><th>Type / reference</th><td>Functional / Visual · UX-03, INT-03</td></tr>
+          <tr><th>Preconditions</th><td>Login page is available; approved registration destination is known.</td></tr>
+          <tr><th>Test data</th><td>None.</td></tr>
+          <tr><th>Steps</th><td>1. Verify the free-trial registration link is visible and operable.<br>2. Follow it and verify the destination.<br>3. Inspect the product announcement and its theme-related content.</td></tr>
+          <tr><th>Expected result</th><td>Registration CTA directs to the approved signup path; announcement is readable, accurate to approved content, and does not obstruct login.</td></tr>
+          <tr><th>Actual / status</th><td>Record observed destination and result. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_COMP_001 — Verify supported browser and device compatibility</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Compatibility · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Compatibility / Regression · UX-01</td></tr>
+          <tr><th>Preconditions</th><td>Supported matrix is agreed: PRD names Chrome, Firefox, Edge, Safari on macOS/iPhone, and Chrome on Android.</td></tr>
+          <tr><th>Test data</th><td>Approved test account and supported browser/device versions.</td></tr>
+          <tr><th>Steps</th><td>1. Run smoke and core login/recovery journeys on each matrix entry.<br>2. Record browser/device-specific layout or behavior differences.</td></tr>
+          <tr><th>Expected result</th><td>Core login page and user journeys work consistently in each supported configuration.</td></tr>
+          <tr><th>Actual / status</th><td>Record exact versions and results. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+    </section>
+
+    <section id="security">
+      <h2>6. Security, privacy, and performance</h2>
+      <article class="case">
+        <h3>TC_VWO_SEC_001 — Enforce HTTPS for login and recovery</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Transport security · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Security · SEC-01</td></tr>
+          <tr><th>Preconditions</th><td>Approved QA/staging endpoint and authorized security inspection method.</td></tr>
+          <tr><th>Test data</th><td>Test endpoint URLs; no real credentials required for transport check.</td></tr>
+          <tr><th>Steps</th><td>1. Request login/recovery over HTTPS.<br>2. Attempt HTTP access where environment permits.<br>3. Inspect redirects and authentication-page resources.</td></tr>
+          <tr><th>Expected result</th><td>Authentication and recovery communications use HTTPS; any HTTP access is redirected or refused according to secure deployment policy; no mixed insecure authentication content is loaded.</td></tr>
+          <tr><th>Actual / status</th><td>Record sanitized URL/protocol outcome. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_SEC_002 — Verify credentials are not exposed during submission</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Data protection · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Security / Privacy · SEC-01, SEC-02</td></tr>
+          <tr><th>Preconditions</th><td>Authorized QA environment and approved inspection tooling.</td></tr>
+          <tr><th>Test data</th><td>Dedicated non-production test account.</td></tr>
+          <tr><th>Steps</th><td>1. Submit test credentials over the login flow.<br>2. Inspect request handling and user-visible URLs/logging available to QA.<br>3. Verify captured evidence is sanitized.</td></tr>
+          <tr><th>Expected result</th><td>Authentication data is transmitted only through the approved protected channel and is not exposed in URL, page, or ordinary client-visible diagnostics. Do not copy secrets into the test record.</td></tr>
+          <tr><th>Actual / status</th><td>Record only sanitized evidence. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_SEC_003 — Verify password remains masked in the form</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Login UI · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Security / UX · SEC-01, UX-02</td></tr>
+          <tr><th>Preconditions</th><td>Login page is open.</td></tr>
+          <tr><th>Test data</th><td>Non-production test password.</td></tr>
+          <tr><th>Steps</th><td>1. Enter a test password.<br>2. Observe its rendering and any visibility control if present.</td></tr>
+          <tr><th>Expected result</th><td>Password characters are not displayed as plain text by default; if a reveal control exists, its state and accessibility label accurately reflect visibility.</td></tr>
+          <tr><th>Actual / status</th><td>Record result without capturing the password. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_SEC_004 — Verify rate limiting for repeated failed attempts</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Abuse protection · <span class="priority p0">P0</span></td></tr>
+          <tr><th>Type / reference</th><td>Security / Boundary · SEC-04</td></tr>
+          <tr><th>Preconditions</th><td>Written authorization and approved non-production test account/environment; configured rate-limit policy known.</td></tr>
+          <tr><th>Test data</th><td>Dedicated account and controlled invalid login attempts, within approved test plan.</td></tr>
+          <tr><th>Steps</th><td>1. Submit invalid credentials up to and around the configured threshold at an approved rate.<br>2. Observe responses and recovery behavior.<br>3. Stop at approved test limit.</td></tr>
+          <tr><th>Expected result</th><td>Request throttling or other configured protection activates according to policy; no successful unauthorized login occurs; user messaging does not expose sensitive account/security details.</td></tr>
+          <tr><th>Actual / status</th><td>Do not exceed approved request limits. Threshold and lockout policy must be supplied before execution. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_SEC_005 — Verify privacy and audit behavior for login events</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Privacy / enterprise security · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Privacy / Compliance · SEC-05</td></tr>
+          <tr><th>Preconditions</th><td>Approved GDPR/CCPA data-handling and enterprise audit criteria are available; test tenant access provided.</td></tr>
+          <tr><th>Test data</th><td>Test-user login success/failure events.</td></tr>
+          <tr><th>Steps</th><td>1. Perform approved login success and failure attempts.<br>2. Review available event/audit records and relevant privacy controls against supplied criteria.</td></tr>
+          <tr><th>Expected result</th><td>Required audit events are handled per approved criteria; personal data is limited/protected as specified; no unapproved sensitive authentication data is stored in accessible event records.</td></tr>
+          <tr><th>Actual / status</th><td>Record sanitized evidence. Blocked until audit/privacy acceptance criteria are supplied; Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_PERF_001 — Verify login page loads within two seconds</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Page performance · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Performance · PERF-01</td></tr>
+          <tr><th>Preconditions</th><td>Standard connection profile and agreed measurement definition (navigation start to usable page) are established.</td></tr>
+          <tr><th>Test data</th><td>Approved test URL, browser, connection, cache conditions, and repeat count.</td></tr>
+          <tr><th>Steps</th><td>1. Load the login page under standard connection conditions.<br>2. Measure time using the agreed method over the agreed runs.<br>3. Record median and outliers.</td></tr>
+          <tr><th>Expected result</th><td>Login page load time meets the PRD target of less than 2 seconds on standard connections under the agreed measurement method.</td></tr>
+          <tr><th>Actual / status</th><td>Record measurements and configuration. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_PERF_002 — Assess concurrent login stability</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Scalability · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>Performance / Load · PERF-03</td></tr>
+          <tr><th>Preconditions</th><td>Authorized load-test environment, workload profile, and target concurrency are approved.</td></tr>
+          <tr><th>Test data</th><td>Isolated non-production test identities and approved load profile.</td></tr>
+          <tr><th>Steps</th><td>1. Execute the approved concurrent login workload.<br>2. Monitor success/failure, response time, error rates, and service health.<br>3. Stop if agreed safety/guardrail thresholds are crossed.</td></tr>
+          <tr><th>Expected result</th><td>System handles the approved workload without unacceptable errors or degradation and satisfies the agreed concurrency/latency targets.</td></tr>
+          <tr><th>Actual / status</th><td>PRD says thousands of simultaneous attempts but provides no exact profile/threshold. Agree workload before test; Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+    </section>
+
+    <section id="integration">
+      <h2>7. Integrations and user journeys</h2>
+      <article class="case">
+        <h3>TC_VWO_INT_001 — Track successful login analytics</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Analytics integration · <span class="priority p2">P2</span></td></tr>
+          <tr><th>Type / reference</th><td>Integration · INT-02</td></tr>
+          <tr><th>Preconditions</th><td>Analytics integration is enabled; approved event contract and test access are available.</td></tr>
+          <tr><th>Test data</th><td>Approved successful test login.</td></tr>
+          <tr><th>Steps</th><td>1. Log in with valid test credentials.<br>2. Inspect the analytics test destination for the expected success event.</td></tr>
+          <tr><th>Expected result</th><td>Successful login is tracked according to the approved event contract without sending passwords, tokens, or unnecessary personal data.</td></tr>
+          <tr><th>Actual / status</th><td>Record event name and sanitized fields. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_INT_002 — Track failed login analytics safely</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Analytics integration · <span class="priority p2">P2</span></td></tr>
+          <tr><th>Type / reference</th><td>Integration / Privacy · INT-02, SEC-05</td></tr>
+          <tr><th>Preconditions</th><td>Analytics integration and event contract are available in test environment.</td></tr>
+          <tr><th>Test data</th><td>One controlled invalid login attempt using a test account.</td></tr>
+          <tr><th>Steps</th><td>1. Submit one invalid login attempt.<br>2. Inspect the analytics test destination for the expected failure event and payload.</td></tr>
+          <tr><th>Expected result</th><td>Failure is tracked if specified, with payload limited to approved fields and no password, token, or sensitive authentication material.</td></tr>
+          <tr><th>Actual / status</th><td>Record sanitized event data. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_INT_003 — Access login assistance through support path</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Customer support integration · <span class="priority p2">P2</span></td></tr>
+          <tr><th>Type / reference</th><td>Integration / UX · INT-03</td></tr>
+          <tr><th>Preconditions</th><td>Support entry point is present and approved destination is known.</td></tr>
+          <tr><th>Test data</th><td>None.</td></tr>
+          <tr><th>Steps</th><td>1. Open login page.<br>2. Select login help/support entry point.<br>3. Verify destination and any handoff context.</td></tr>
+          <tr><th>Expected result</th><td>User reaches the approved support path; no credentials, reset token, or sensitive session data are passed in an unsafe manner.</td></tr>
+          <tr><th>Actual / status</th><td>Conditional on support entry point in release scope. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_JOURNEY_001 — Complete new-user registration handoff</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>New-user journey · <span class="priority p1">P1</span></td></tr>
+          <tr><th>Type / reference</th><td>End-to-end / Integration · UX-03, INT-04</td></tr>
+          <tr><th>Preconditions</th><td>Approved free-trial registration flow and test signup data are available.</td></tr>
+          <tr><th>Test data</th><td>Approved new-user test data; no real personal data unless authorized.</td></tr>
+          <tr><th>Steps</th><td>1. Start at login page.<br>2. Follow free-trial registration link.<br>3. Complete the in-scope registration handoff and observe post-registration onboarding if available.</td></tr>
+          <tr><th>Expected result</th><td>Registration path is reachable and the new user is directed to the appropriate signup/onboarding experience as defined for the release.</td></tr>
+          <tr><th>Actual / status</th><td>Record completed steps and destination. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+      <article class="case">
+        <h3>TC_VWO_JOURNEY_002 — Preserve returning user dashboard context</h3>
+        <table><tbody>
+          <tr><th>Module / priority</th><td>Returning-user journey · <span class="priority p2">P2</span></td></tr>
+          <tr><th>Type / reference</th><td>End-to-end / Functional · INT-01, INT-04</td></tr>
+          <tr><th>Preconditions</th><td>Test account has a known authorized dashboard/recent-activity context; expected behavior documented.</td></tr>
+          <tr><th>Test data</th><td>Approved returning-user test account.</td></tr>
+          <tr><th>Steps</th><td>1. Sign in to the account and note allowed dashboard context.<br>2. End session.<br>3. Sign in again and inspect destination/context.</td></tr>
+          <tr><th>Expected result</th><td>User reaches their personalized dashboard and context is preserved as specified by the product’s supported behavior and access controls.</td></tr>
+          <tr><th>Actual / status</th><td>Record observed destination without exposing private account details. Status: Not Run.</td></tr>
+        </tbody></table>
+      </article>
+    </section>
+
+    <section id="execution-summary">
+      <h2>8. Execution summary</h2>
+      <p>Test execution is not performed by this document. All cases start as <strong>Not Run</strong>; update status and actual result during execution.</p>
+      <table>
+        <thead><tr><th>Test case ID</th><th>Scenario</th><th>Type</th><th>Priority</th><th>Requirement reference</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>TC_VWO_LOGIN_001</td><td>Valid credentials reach dashboard</td><td>Functional</td><td>P0</td><td>AUTH-01, INT-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_LOGIN_002</td><td>Incorrect password rejected safely</td><td>Negative</td><td>P0</td><td>AUTH-01, AUTH-03, SEC-04</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_LOGIN_003</td><td>Unregistered email handled safely</td><td>Negative</td><td>P0</td><td>AUTH-01, AUTH-03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_LOGIN_004</td><td>Both fields empty</td><td>Validation</td><td>P0</td><td>AUTH-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_LOGIN_005</td><td>Password missing</td><td>Validation</td><td>P1</td><td>AUTH-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_LOGIN_006</td><td>Malformed email rejected</td><td>Validation</td><td>P1</td><td>AUTH-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_LOGIN_007</td><td>Valid email accepted</td><td>Validation</td><td>P1</td><td>AUTH-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_LOGIN_008</td><td>Validation clears after correction</td><td>Validation / UX</td><td>P2</td><td>AUTH-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_LOGIN_009</td><td>Authentication loading state</td><td>UX</td><td>P1</td><td>UX-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_LOGIN_010</td><td>Repeated submission while pending</td><td>Functional / Error handling</td><td>P1</td><td>UX-01, SEC-04</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_PASS_001</td><td>Open forgot-password flow</td><td>Functional</td><td>P1</td><td>PASS-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_PASS_002</td><td>Request email recovery</td><td>Functional</td><td>P1</td><td>PASS-01, PASS-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_PASS_003</td><td>Unknown email recovery handling</td><td>Privacy / Negative</td><td>P1</td><td>PASS-01, SEC-04</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_PASS_004</td><td>Reset with valid token</td><td>Functional</td><td>P0</td><td>PASS-02, PASS-03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_PASS_005</td><td>Reject invalid/expired reset token</td><td>Security</td><td>P0</td><td>PASS-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_PASS_006</td><td>Prevent reset-token reuse</td><td>Security</td><td>P1</td><td>PASS-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_PASS_007</td><td>Enforce password policy</td><td>Validation</td><td>P1</td><td>PASS-03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_SESS_001</td><td>Secure session creation</td><td>Security</td><td>P0</td><td>SESS-02, SEC-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_SESS_002</td><td>Session timeout</td><td>Security / Boundary</td><td>P0</td><td>SESS-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_SESS_003</td><td>Remember Me persistence</td><td>Functional</td><td>P1</td><td>SESS-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_SESS_004</td><td>Terminate session access</td><td>Security</td><td>P0</td><td>SESS-02, SEC-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_AUTHX_001</td><td>Successful MFA challenge</td><td>Functional</td><td>P1*</td><td>AUTHX-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_AUTHX_002</td><td>Failed/cancelled MFA</td><td>Security</td><td>P1*</td><td>AUTHX-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_AUTHX_003</td><td>Successful enterprise SSO</td><td>Integration</td><td>P1*</td><td>AUTHX-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_AUTHX_004</td><td>Failed/cancelled SSO</td><td>Integration</td><td>P1*</td><td>AUTHX-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_AUTHX_005</td><td>Social provider login</td><td>Integration</td><td>P2*</td><td>AUTHX-03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_UX_001</td><td>Initial focus</td><td>UX / Accessibility</td><td>P2</td><td>UX-01, A11Y-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_UX_002</td><td>Clickable form labels</td><td>UX / Accessibility</td><td>P2</td><td>UX-01, A11Y-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_A11Y_001</td><td>Keyboard-only navigation</td><td>Accessibility</td><td>P1</td><td>A11Y-01, A11Y-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_A11Y_002</td><td>Screen-reader names/errors</td><td>Accessibility</td><td>P1</td><td>A11Y-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_A11Y_003</td><td>High-contrast presentation</td><td>Accessibility</td><td>P1</td><td>A11Y-03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_A11Y_004</td><td>WCAG 2.1 AA assessment</td><td>Accessibility</td><td>P1</td><td>A11Y-01–03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_UX_003</td><td>Responsive/touch UI</td><td>Compatibility / UX</td><td>P1</td><td>UX-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_UX_004</td><td>Light/Dark Mode</td><td>Visual / UX</td><td>P2</td><td>UX-03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_UX_005</td><td>Registration and announcement</td><td>Functional / Visual</td><td>P2</td><td>UX-03, INT-03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_COMP_001</td><td>Supported browser/device matrix</td><td>Compatibility</td><td>P1</td><td>UX-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_SEC_001</td><td>HTTPS enforcement</td><td>Security</td><td>P0</td><td>SEC-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_SEC_002</td><td>Credential transmission protection</td><td>Security / Privacy</td><td>P0</td><td>SEC-01, SEC-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_SEC_003</td><td>Password masking</td><td>Security / UX</td><td>P1</td><td>SEC-01, UX-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_SEC_004</td><td>Rate limiting</td><td>Security</td><td>P0</td><td>SEC-04</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_SEC_005</td><td>Privacy and audit behavior</td><td>Privacy / Compliance</td><td>P1</td><td>SEC-05</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_PERF_001</td><td>Page load under two seconds</td><td>Performance</td><td>P1</td><td>PERF-01</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_PERF_002</td><td>Concurrent login stability</td><td>Performance / Load</td><td>P1</td><td>PERF-03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_INT_001</td><td>Successful-login analytics</td><td>Integration</td><td>P2</td><td>INT-02</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_INT_002</td><td>Failed-login analytics</td><td>Integration / Privacy</td><td>P2</td><td>INT-02, SEC-05</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_INT_003</td><td>Customer support handoff</td><td>Integration / UX</td><td>P2</td><td>INT-03</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_JOURNEY_001</td><td>New-user registration</td><td>End-to-end</td><td>P1</td><td>UX-03, INT-04</td><td>Not Run</td></tr>
+          <tr><td>TC_VWO_JOURNEY_002</td><td>Returning-user context</td><td>End-to-end</td><td>P2</td><td>INT-01, INT-04</td><td>Not Run</td></tr>
+        </tbody>
+      </table>
+      <p class="small">Conditional priority (*) means execute only if the feature is included and configured in the release. Add actual result, execution date, tester, evidence reference, and defect ID during test execution.</p>
+    </section>
+
+    <footer>
+      <p>VWO Login Dashboard Test Cases · Version 1.0 · Generated from the product requirements supplied for this request. Test cases are specifications, not evidence of execution or product compliance.</p>
+    </footer>
+  </main>
+</body>
+</html>
